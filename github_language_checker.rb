@@ -32,7 +32,7 @@ module GithubLanguageChecker
 	  begin
 		repositories = Octokit.repositories(name_to_search)
 	  rescue
-	    puts 'Cannot connect to Github API at this time.'
+	    puts 'There was an issue finding that user from github API.'
 	  end
 
 	  return repositories
