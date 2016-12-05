@@ -5,17 +5,16 @@ module GithubLanguageChecker
 
 		def check_language(name_to_search)
 
-          begin
-			repositories = Octokit.repositories(name_to_search)
-			puts "User #{name_to_search} has #{repositories.length} repos."
+			repositories = get_user_repositories(name_to_search)
 
-            most_used_language = find_most_frequent_langauge(repositories)
+			if !repositories.nil?
 
-			puts "It looks like their favortie language is #{most_used_language}"
-		  rescue	
-			puts 'Cannot connect to Github API at this time.'
-		  end
+			  puts "User #{name_to_search} has #{repositories.length} repos."
 
+              most_used_language = find_most_frequent_langauge(repositories)
+
+			  puts "It looks like their favortie language is #{most_used_language}"
+		    end
 		end
 	
 
@@ -28,11 +27,17 @@ module GithubLanguageChecker
 
         return most_used_language
 	end
+
+	def get_user_repositories(name_to_search)
+	  begin
+		repositories = Octokit.repositories(name_to_search)
+	  rescue
+	    puts 'Cannot connect to Github API at this time.'
+	  end
+
+	  return repositories
+	end
+
   end
 end
-
-puts 'Please enter a github username:'
-
-language_checker = GithubLanguageChecker::LanguageChecker.new
-
-language_checker.check_language(gets.chomp) 
+ 
